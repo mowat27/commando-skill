@@ -1,0 +1,1 @@
+CommandoXFitClassessIntent what classes are on {Date}
