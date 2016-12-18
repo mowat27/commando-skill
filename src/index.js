@@ -40,15 +40,44 @@ function buildResponse(sessionAttributes, speechletResponse) {
 function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     const sessionAttributes = {};
-    const cardTitle = 'Welcome';
-    const speechOutput = 'We have loads of classes mate.  Come on down';
-    // If the user either does not reply to the welcome message or says something that is not
-    // understood, they will be prompted again with this text.
-    const repromptText = 'Catch your breath mate and try again';
-    const shouldEndSession = false;
+    const cardTitle = 'Commando X Fit Help';
+    const speechOutput = 'Ask me what classes are on today.';
 
     callback(sessionAttributes,
-        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        buildSpeechletResponse(cardTitle, speechOutput, '', true));
+}
+
+const SCHEDULE = {
+  monday : [
+    {time: "06 fifteen", name: "Functional Abs"},
+    {time: "07 hundred", name: "Coaches Workout"},
+    {time: "twelve hundred", name: "H.I.I.T"},
+    {time: "seventeen thirty", name: "Functional Fitness"},
+    {time: "eighteen thirty", name: "Functional Fitness"}
+  ]
+}
+
+function agendaToSpokenWord(agenda) {
+  let result = ""
+  for (var exerciseClass in agenda) {
+    result = result + exerciseClass.time + " - " + exerciseClass.name + "."
+  }
+  return result;
+}
+
+function getClassesResponse(callback) {
+  // If we wanted to initialize the session to have some attributes we could add those here.
+  const sessionAttributes = {};
+  const cardTitle = 'Commando X Fit Class Listing';
+
+  const speechOutput = agendaToSpokenWord(SCHEDULE.monday)
+
+  // If the user either does not reply to the welcome message or says something that is not
+  // understood, they will be prompted again with this text.
+  const repromptText = '';
+
+  callback(sessionAttributes,
+      buildSpeechletResponse(cardTitle, speechOutput, repromptText, true));
 }
 
 function handleSessionEndRequest(callback) {
@@ -90,7 +119,7 @@ function onIntent(intentRequest, session, callback) {
 
     // Dispatch to your skill's intent handlers
     if (intentName === 'CommandoXFitClassessIntent') {
-        getWelcomeResponse(callback);
+        getClassesResponse(callback);
     } else if (intentName === 'AMAZON.HelpIntent') {
         getWelcomeResponse(callback);
     } else if (intentName === 'AMAZON.StopIntent' || intentName === 'AMAZON.CancelIntent') {
@@ -122,11 +151,10 @@ exports.handler = (event, context, callback) => {
          * Uncomment this if statement and populate with your skill's application ID to
          * prevent someone else from configuring a skill that sends requests to this function.
          */
-        /*
-        if (event.session.application.applicationId !== 'amzn1.echo-sdk-ams.app.[unique-value-here]') {
-             callback('Invalid Application ID');
-        }
-        */
+
+        // if (event.session.application.applicationId !== APP_ID) {
+        //      callback('Invalid Application ID');
+        // }
 
         if (event.session.new) {
             onSessionStarted({ requestId: event.request.requestId }, event.session);
