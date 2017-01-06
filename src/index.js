@@ -1,7 +1,8 @@
-
 'use strict';
 
 const APP_ID = "amzn1.ask.skill.43aca936-aabc-40e0-ba0d-7ac196227ffd";
+
+const SCHEDULE = require('./schedule');
 
 // --------------- Helpers that build all of the responses -----------------------
 
@@ -47,30 +48,14 @@ function getWelcomeResponse(callback) {
         buildSpeechletResponse(cardTitle, speechOutput, '', true));
 }
 
-const SCHEDULE = {
-  monday : [
-    {time: "06 fifteen", name: "Functional Abs"},
-    {time: "07 hundred", name: "Coaches Workout"},
-    {time: "twelve hundred", name: "H.I.I.T"},
-    {time: "seventeen thirty", name: "Functional Fitness"},
-    {time: "eighteen thirty", name: "Functional Fitness"}
-  ]
-}
-
-function agendaToSpokenWord(agenda) {
-  let result = ""
-  for (var exerciseClass in agenda) {
-    result = result + exerciseClass.time + " - " + exerciseClass.name + "."
-  }
-  return result;
-}
+var commando = require("./commando");
 
 function getClassesResponse(callback) {
   // If we wanted to initialize the session to have some attributes we could add those here.
   const sessionAttributes = {};
   const cardTitle = 'Commando X Fit Class Listing';
 
-  const speechOutput = agendaToSpokenWord(SCHEDULE.monday)
+  const speechOutput = commando.agendaToSpokenWord(SCHEDULE.monday)
 
   // If the user either does not reply to the welcome message or says something that is not
   // understood, they will be prompted again with this text.
@@ -143,7 +128,7 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
-exports.handler = (event, context, callback) => {
+exports.handler = function(event, context, callback) {
     try {
         console.log(`event.session.application.applicationId=${event.session.application.applicationId}`);
 
