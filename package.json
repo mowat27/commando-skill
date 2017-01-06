@@ -1,0 +1,22 @@
+{
+  "name": "commando-skill",
+  "version": "1.0.0",
+  "description": "Ask Alexa for class times at Commando X Fit",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mowat27/commando-skill.git"
+  },
+  "author": "Adrian Mowat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mowat27/commando-skill/issues"
+  },
+  "homepage": "https://github.com/mowat27/commando-skill#readme"
+}
